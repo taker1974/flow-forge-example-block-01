@@ -1,0 +1,140 @@
+# Continuous code analysis for flow-forge-example-block-01 project
+
+## 📝 MANDATORY RULES FOR MARKDOWN
+
+**CRITICALLY IMPORTANT**: When working with Markdown files (.md) ALWAYS:
+
+1. **After creating or editing any .md file MANDATORY:**
+   - Call `read_lints` to check the file
+   - Fix ALL found linter errors
+   - Repeat the check until no errors remain
+   - DO NOT complete the task if there are Markdown linter errors
+
+2. **Main Markdown formatting rules:**
+   - Code blocks must be surrounded by empty lines (MD031)
+   - Code blocks must have language specification (MD040)
+   - Headings must not end with a colon (MD026)
+   - Lists must be surrounded by empty lines (MD032)
+   - Do not use emphasis instead of headings (MD036)
+   - There must be no duplicate headings (MD024)
+   - There must be no multiple empty lines in a row (MD012)
+
+3. **Automatic checking:**
+   - If editing a .md file - check the linter IMMEDIATELY after editing
+   - If creating a new .md file - check the linter before completing the task
+   - If the user asks to fix errors - fix ALL errors, not just the specified ones
+
+## 🔍 MANDATORY CODE ANALYSIS
+
+With every interaction with code ALWAYS check and analyze:
+
+### 🛡️ SECURITY
+
+- Do not suggest @Valid for built-in data types if there are already checks for null, empty, size, etc.
+- **SQL Injection**: Check all SQL queries for injection vulnerabilities
+- **Hardcoded Secrets**: Look for hardcoded passwords, API keys, tokens
+- **Input Validation**: Analyze user input validation
+- **Authentication**: Check authentication and authorization mechanisms
+- **Data Exposure**: Look for potential sensitive data leaks
+- **CORS Configuration**: Check CORS settings for security
+
+### ⚡ PERFORMANCE
+
+- **N+1 Queries**: Look for N+1 query problems in JPA/Hibernate
+- **Memory Leaks**: Check for potential memory leaks
+- **Inefficient Algorithms**: Analyze algorithm complexity
+- **Database Queries**: Optimize slow queries
+- **Caching**: Check the need for caching
+- **Connection Pooling**: Analyze connection pool settings
+
+### 🧵 THREAD SAFETY
+
+- **Concurrent Access**: Check thread-safety of all shared resources
+- **Synchronization**: Analyze usage of synchronized, locks
+- **Race Conditions**: Look for potential race conditions
+- **Volatile Variables**: Check correct usage of volatile
+- **Immutable Objects**: Recommend immutable objects where possible
+
+### 🏗️ ARCHITECTURE AND PATTERNS
+
+- Do not suggest breaking down classes only based on the number of lines of code
+- **SOLID Principles**: Check compliance with SOLID principles
+- **Design Patterns**: Analyze correct application of patterns
+- **Code Duplication**: Look for and suggest elimination of duplication
+- **Separation of Concerns**: Check separation of responsibilities
+- **Dependency Injection**: Analyze correctness of DI
+
+### 🚨 ERROR HANDLING
+
+- **Exception Handling**: Check completeness of exception handling
+- **Error Logging**: Analyze quality of error logging
+- **Graceful Degradation**: Look for graceful degradation opportunities
+- **Retry Logic**: Check the need for retry mechanisms
+- **Circuit Breaker**: Analyze the need for circuit breaker
+
+### 📊 CODE QUALITY
+
+- **Code Smells**: Look for code smells and suggest refactoring
+- **Complexity**: Analyze cyclomatic complexity
+- **Naming**: Check quality of variable/method naming
+- **Comments**: Analyze quality and necessity of comments
+- **Documentation**: Check completeness of JavaDoc documentation
+
+## 🎯 SPECIFIC CHECKS FOR AI-CHAINS
+
+### Spring Boot Best Practices
+
+- **Configuration Properties**: Check correctness of @ConfigurationProperties
+- **Bean Lifecycle**: Analyze @PostConstruct/@PreDestroy methods
+- **Transaction Management**: Check @Transactional annotations
+- **Profile Configuration**: Analyze usage of profiles
+
+### NATS Integration
+
+- **Connection Management**: Check correctness of NATS connection management
+- **Message Handling**: Analyze NATS message handling
+- **Error Recovery**: Check recovery mechanisms after errors
+- **Resource Cleanup**: Analyze resource release
+
+### Database Layer
+
+- **JPA Queries**: Optimize JPA queries and projections
+- **Liquibase**: Check correctness of migrations
+- **Entity Relationships**: Analyze relationships between entities
+- **Indexing**: Recommend necessary indexes
+
+### Testing
+
+- **Test Coverage**: Analyze test coverage
+- **Test Quality**: Check quality of unit/integration tests
+- **Mock Usage**: Analyze correctness of mock usage
+- **Test Data**: Check quality of test data
+
+## 📋 REPORTING
+
+With every analysis provide:
+
+1. **Critical issues** (require immediate fixing)
+2. **Important improvements** (recommended to fix)
+3. **Optimization suggestions** (for quality improvement)
+4. **Specific code examples** with suggested fixes
+5. **Prioritization** by importance and complexity of fixing
+
+## 🔄 CONTINUOUS IMPROVEMENT
+
+- Track recurring problem patterns
+- Suggest architectural improvements
+- Recommend new tools and libraries
+- Analyze performance after changes
+
+## ⚠️ CRITICAL AREAS
+
+Pay special attention to:
+
+- Controllers - validation and error handling
+- Repository layer - query optimization
+- Configuration classes - security settings
+
+---
+
+**Remember**: The goal is not just to find problems, but to suggest specific solutions and improvements for creating reliable, secure, and performant code.
