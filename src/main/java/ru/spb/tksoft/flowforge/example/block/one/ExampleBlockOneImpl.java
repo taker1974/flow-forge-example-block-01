@@ -59,7 +59,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
      * @param blockTypeId - the block type id.
      * @param defaultInputText - the default input text.
      */
-    protected ExampleBlockOneImpl(final @NotBlank String internalBlockId,
+    public ExampleBlockOneImpl(final @NotBlank String internalBlockId,
             final @NotBlank String blockTypeId, final @NotNull String defaultInputText) {
 
         super(internalBlockId, blockTypeId, defaultInputText);

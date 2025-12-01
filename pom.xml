@@ -62,8 +62,8 @@
         <slf4j.version>2.0.17</slf4j.version>
 
         <!-- TKSoft: Versions of our own libraries. -->
-        <tk-log-utils.version>2.0.2</tk-log-utils.version>
-        <tk-common-exceptions.version>1.0.0</tk-common-exceptions.version>
+        <tk-log-utils.version>2.0.5</tk-log-utils.version>
+        <tk-common-exceptions.version>2.0.5</tk-common-exceptions.version>
 
         <!-- TKSoft: Version of FlowForge Block SDK. -->
         <flow-forge-sdk.version>2.0.5</flow-forge-sdk.version>
