@@ -24,6 +24,7 @@ import java.util.Set;
 public class ModuleLoader {
     
     public static ModuleLayer loadModule(Path modulePath) {
+        
         // Создаём ModuleFinder для поиска модулей в указанной директории
         ModuleFinder finder = ModuleFinder.of(modulePath);
         
@@ -102,6 +103,7 @@ public class ModuleLoaderWithDependencies {
     }
     
     public static void main(String[] args) {
+        
         // Путь к директории с JAR файлами модулей
         Path modulesDir = Paths.get("/path/to/modules");
         
@@ -187,6 +189,7 @@ public class BlockPluginScanner {
      */
     public static BlockPluginInfo getBlockPluginInfo(Class<?> blockClass) {
         BlockPlugin annotation = blockClass.getAnnotation(BlockPlugin.class);
+        
         if (annotation == null) {
             throw new IllegalArgumentException(
                 "Class " + blockClass.getName() + " does not have @BlockPlugin annotation");
@@ -370,6 +373,7 @@ import ru.spb.tksoft.flowforge.sdk.contract.BlockPlugin;
 public class CompleteExample {
     
     public static void main(String[] args) throws Exception {
+        
         // 1. Загружаем модуль
         Path modulesDir = Paths.get("/path/to/modules");
         ModuleLayer layer = ModuleLoaderWithDependencies.loadModuleWithDependencies(
@@ -405,6 +409,158 @@ public class CompleteExample {
 }
 ```
 
+## Динамическая загрузка модулей из каталога с неизвестными JAR
+
+В реальных сценариях заранее неизвестно, какие JAR файлы лежат в каталоге и какие из них содержат модули/классы с `@BlockPlugin`. Ниже приведён пример, который:
+
+- принимает путь к каталогу с JAR файлами;
+- пытается загрузить каждый JAR как модуль (или автоматический модуль);
+- сканирует содержимое модулей без знания названия пакетов;
+- находит классы, аннотированные `@BlockPlugin`, и реализующие `ru.spb.tksoft.flowforge.sdk.contract.Block`.
+
+```java
+package ru.spb.tksoft.flowforge.loader;
+
+import java.io.IOException;
+import java.lang.module.Configuration;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleLayer;
+import java.lang.module.ModuleReader;
+import java.lang.module.ModuleReference;
+import java.lang.reflect.Modifier;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import ru.spb.tksoft.flowforge.sdk.contract.Block;
+import ru.spb.tksoft.flowforge.sdk.contract.BlockPlugin;
+
+public final class DynamicBlockLoader {
+
+    public record LoadedBlock(Class<? extends Block> type, BlockPlugin metadata) {}
+
+    public static List<LoadedBlock> loadBlocksFromDirectory(Path modulesDir) throws IOException {
+        ModuleFinder finder = ModuleFinder.of(modulesDir);
+        ModuleLayer parent = ModuleLayer.boot();
+
+        Set<String> rootModules = finder.findAll().stream()
+                .map(ref -> ref.descriptor().name())
+                .collect(Collectors.toSet());
+
+        Configuration configuration = parent.configuration()
+                .resolveAndBind(finder, ModuleFinder.of(), rootModules);
+
+        ModuleLayer layer = parent.defineModulesWithOneLoader(configuration,
+                ClassLoader.getSystemClassLoader());
+
+        List<LoadedBlock> blocks = new ArrayList<>();
+
+        for (ModuleReference reference : finder.findAll()) {
+            String moduleName = reference.descriptor().name();
+            ClassLoader loader = layer.findLoader(moduleName);
+
+            try (ModuleReader reader = reference.open()) {
+                reader.list()
+                        .filter(entry -> entry.endsWith(".class"))
+                        .filter(entry -> !entry.equals("module-info.class"))
+                        .forEach(entry -> {
+                            String className = entry
+                                    .replace('/', '.')
+                                    .replace('\\', '.')
+                                    .replaceAll("\\.class$", "");
+                            try {
+                                Class<?> candidate = Class.forName(className, false, loader);
+                                if (Block.class.isAssignableFrom(candidate)
+                                        && candidate.isAnnotationPresent(BlockPlugin.class)
+                                        && Modifier.isPublic(candidate.getModifiers())) {
+                                    blocks.add(new LoadedBlock(candidate.asSubclass(Block.class),
+                                            candidate.getAnnotation(BlockPlugin.class)));
+                                }
+                            } catch (ClassNotFoundException | LinkageError ignored) {
+                                // Логируем и продолжаем
+                            }
+                        });
+            }
+        }
+
+        return blocks;
+    }
+}
+```
+
+> Под капотом `ModuleFinder` создаёт модуль даже для JAR без `module-info.java` (automatic module). Поэтому пример одинаково работает как для модулей, так и для обычных JAR.
+
+## Создание экземпляров загруженных типов
+
+Аналог `Activator.CreateInstance` из .NET можно реализовать поверх Java Reflection. Ниже пример фабрики, которая:
+
+- принимает класс блока и аргументы конструктора;
+- ищет подходящий публичный конструктор;
+- создаёт экземпляр.
+
+```java
+package ru.spb.tksoft.flowforge.loader;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import ru.spb.tksoft.flowforge.sdk.contract.Block;
+
+public final class BlockActivator {
+
+    private BlockActivator() {}
+
+    public static Block createInstance(Class<? extends Block> type, Object... args) {
+        for (Constructor<?> ctor : type.getConstructors()) {
+            if (ctor.getParameterCount() != args.length) {
+                continue;
+            }
+            if (!areCompatible(ctor.getParameterTypes(), args)) {
+                continue;
+            }
+            try {
+                ctor.setAccessible(true);
+                return (Block) ctor.newInstance(args);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalStateException("Failed to instantiate " + type.getName(), e);
+            }
+        }
+        throw new IllegalArgumentException(
+                "No matching public constructor found for " + type.getName());
+    }
+
+    private static boolean areCompatible(Class<?>[] parameterTypes, Object[] args) {
+        return Arrays.equals(parameterTypes,
+                Arrays.stream(args)
+                        .map(arg -> arg != null ? arg.getClass() : Object.class)
+                        .toArray(Class[]::new));
+    }
+}
+```
+
+Пример использования:
+
+```java
+List<LoadedBlock> loadedBlocks = DynamicBlockLoader.loadBlocksFromDirectory(modulesDir);
+
+for (LoadedBlock loaded : loadedBlocks) {
+    Block instance = BlockActivator.createInstance(
+            loaded.type(),
+            "internal-block-42",
+            loaded.metadata().blockTypeId(),
+            "Default input");
+
+    System.out.println("Created block: " + instance.getBlockTypeId());
+}
+```
+
+### Рекомендации
+
+- Добавьте к `BlockActivator` поддержку более гибкого сопоставления типов (например, примитивы, интерфейсы), если блоки используют сложные конструкторы.
+- Для большого числа JAR файлов кешируйте результаты `DynamicBlockLoader`, чтобы избежать повторного сканирования.
+- При загрузке пользовательских модулей проверяйте цифровые подписи/хэши JAR для безопасности.
+
 ## Зависимости модуля
 
 При загрузке модуля необходимо обеспечить доступность следующих зависимостей:
@@ -426,4 +582,3 @@ public class CompleteExample {
 3. **Транзитивные зависимости**: Модуль использует `requires transitive` для `ru.spb.tksoft.flowforge.sdk`, что означает, что клиенты модуля автоматически получают доступ к типам из SDK.
 
 4. **Экспорт пакета**: Пакет `ru.spb.tksoft.flowforge.example.block.one` экспортируется и доступен для использования клиентами модуля.
-
