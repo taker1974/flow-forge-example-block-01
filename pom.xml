@@ -254,15 +254,30 @@
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <finalName>${project.artifactId}-${project.version}-fat</finalName>
                                     <filters>
+                                        <!-- TKSoft: Exclude signatures and module-info.class from
+                                        all artifacts -->
                                         <filter>
                                             <artifact>*:*</artifact>
                                             <excludes>
                                                 <exclude>META-INF/*.SF</exclude>
                                                 <exclude>META-INF/*.DSA</exclude>
                                                 <exclude>META-INF/*.RSA</exclude>
+                                                <!-- TKSoft: Exclude module-info.class from all
+                                                dependencies to avoid conflicts -->
+                                                <exclude>module-info.class</exclude>
+                                                <exclude>META-INF/versions/*/module-info.class</exclude>
                                             </excludes>
                                         </filter>
                                     </filters>
+                                    <transformers>
+                                        <!-- TKSoft: Add module-info.class from the main module to
+                                        the fat jar -->
+                                        <transformer
+                                            implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                            <resource>module-info.class</resource>
+                                            <file>${project.build.outputDirectory}/module-info.class</file>
+                                        </transformer>
+                                    </transformers>
                                 </configuration>
                             </execution>
                         </executions>
