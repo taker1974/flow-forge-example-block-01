@@ -30,7 +30,8 @@ import ru.spb.tksoft.utils.log.LogEx;
  * 
  * @author Konstantin Terskikh, kostus.online.1974@yandex.ru, 2025
  */
-@BlockPlugin(blockTypeDescription = "Example block 01", blockTypeId = "example-block-01")
+@BlockPlugin(engineVersion = "2.0.5", blockTypeDescription = "Example block 01",
+        blockTypeId = "example-block-01")
 public final class ExampleBlockOneImpl extends BlockBaseImpl
         implements RunnableStateChangeListener {
 
@@ -51,6 +52,16 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
     }
 
     /**
+     * Get the printable state.
+     * 
+     * @return the printable state with the counter.
+     */
+    @Override
+    public String getPrintableState() {
+        return super.getPrintableState() + System.lineSeparator() + "Counter: " + counter;
+    }
+
+    /**
      * Constructor.
      * 
      * internalBlockId, blockTypeId, defaultInputText are validated in super constructor.
@@ -59,7 +70,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
      * @param blockTypeId - the block type id.
      * @param defaultInputText - the default input text.
      */
-    protected ExampleBlockOneImpl(final @NotBlank String internalBlockId,
+    public ExampleBlockOneImpl(final @NotBlank String internalBlockId,
             final @NotBlank String blockTypeId, final @NotNull String defaultInputText) {
 
         super(internalBlockId, blockTypeId, defaultInputText);
