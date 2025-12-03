@@ -52,6 +52,16 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
     }
 
     /**
+     * Get the printable state.
+     * 
+     * @return the printable state with the counter.
+     */
+    @Override
+    public String getPrintableState() {
+        return super.getPrintableState() + System.lineSeparator() + "Counter: " + counter;
+    }
+
+    /**
      * Constructor.
      * 
      * internalBlockId, blockTypeId, defaultInputText are validated in super constructor.
