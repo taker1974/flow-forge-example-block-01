@@ -30,7 +30,8 @@ import ru.spb.tksoft.utils.log.LogEx;
  * 
  * @author Konstantin Terskikh, kostus.online.1974@yandex.ru, 2025
  */
-@BlockPlugin(blockTypeDescription = "Example block 01", blockTypeId = "example-block-01")
+@BlockPlugin(engineVersion = "2.0.5", blockTypeDescription = "Example block 01",
+        blockTypeId = "example-block-01")
 public final class ExampleBlockOneImpl extends BlockBaseImpl
         implements RunnableStateChangeListener {
 

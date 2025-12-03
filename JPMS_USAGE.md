@@ -441,6 +441,7 @@ public final class DynamicBlockLoader {
     public record LoadedBlock(Class<? extends Block> type, BlockPlugin metadata) {}
 
     public static List<LoadedBlock> loadBlocksFromDirectory(Path modulesDir) throws IOException {
+        
         ModuleFinder finder = ModuleFinder.of(modulesDir);
         ModuleLayer parent = ModuleLayer.boot();
 
@@ -512,6 +513,7 @@ public final class BlockActivator {
     private BlockActivator() {}
 
     public static Block createInstance(Class<? extends Block> type, Object... args) {
+        
         for (Constructor<?> ctor : type.getConstructors()) {
             if (ctor.getParameterCount() != args.length) {
                 continue;
