@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import ru.spb.tksoft.flowforge.sdk.contract.Block;
 import ru.spb.tksoft.flowforge.sdk.contract.BlockPlugin;
 import ru.spb.tksoft.flowforge.sdk.contract.RunnableStateChangeListener;
 import ru.spb.tksoft.flowforge.sdk.enumeration.RunnableState;
@@ -74,6 +75,15 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
             final @NotBlank String blockTypeId, final @NotNull String defaultInputText) {
 
         super(internalBlockId, blockTypeId, defaultInputText);
+    }
+
+    /**
+     * Service provider method for Java ServiceLoader.
+     * 
+     * @return a new instance of this block implementation.
+     */
+    public static Block provider() {
+        return new ExampleBlockOneImpl("default-internal-id", BLOCK_TYPE_ID, "");
     }
 
     /** The maximum count. */
