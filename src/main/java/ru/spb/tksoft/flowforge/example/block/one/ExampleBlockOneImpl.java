@@ -39,7 +39,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
     private static final Logger log = LoggerFactory.getLogger(ExampleBlockOneImpl.class);
 
     /** Define the block type id for caching. */
-    private static final String BLOCK_TYPE_ID =
+    public static final String BLOCK_TYPE_ID =
             getBlockTypeIdFromAnnotation(ExampleBlockOneImpl.class);
 
     /**

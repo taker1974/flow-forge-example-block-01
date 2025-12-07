@@ -20,9 +20,8 @@ module ru.spb.tksoft.flowforge.example.block.one {
     requires ru.spb.tksoft.utils.log;
     requires ru.spb.tksoft.common.exceptions;
 
-    // NOTE: 'provides' is needed for compatibility with ServiceLoader, keep it and provider(), but
-    // note that the created instance with default parameters will not be used in real work.
-    provides ru.spb.tksoft.flowforge.sdk.contract.Block
-            with ru.spb.tksoft.flowforge.example.block.one.ExampleBlockOneImpl;
+    // TKSoft: Provides the block builder service for ServiceLoader.
+    provides ru.spb.tksoft.flowforge.sdk.contract.BlockBuilderService
+            with ru.spb.tksoft.flowforge.example.block.service.BlockBuilderServiceImpl;
 }
 
