@@ -20,7 +20,8 @@ module ru.spb.tksoft.flowforge.example.block.one {
     requires ru.spb.tksoft.utils.log;
     requires ru.spb.tksoft.common.exceptions;
 
-    // Note: For dynamic loading with reflection by @BlockPlugin annotation,
-    // 'provides' directive is not required, as the loader will scan classes directly.
+    // TKSoft: Provides the block builder service for ServiceLoader.
+    provides ru.spb.tksoft.flowforge.sdk.contract.BlockBuilderService
+            with ru.spb.tksoft.flowforge.example.block.service.BlockBuilderServiceImpl;
 }
 
