@@ -13,6 +13,8 @@
  */
 package ru.spb.tksoft.flowforge.example.block.service;
 
+import java.util.Arrays;
+import java.util.List;
 import ru.spb.tksoft.common.exceptions.NotImplementedException;
 import ru.spb.tksoft.flowforge.example.block.one.ExampleBlockOneImpl;
 import ru.spb.tksoft.flowforge.sdk.contract.Block;
@@ -33,6 +35,16 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
     }
 
     /**
+     * Get the supported block type ids for ServiceLoader.
+     * 
+     * @return the supported block type ids.
+     */
+    @Override
+    public List<String> getSupportedBlockTypeIds() {
+        return Arrays.asList(ExampleBlockOneImpl.BLOCK_TYPE_ID);
+    }
+
+    /**
      * Build a block.
      * 
      * @param blockTypeId the block type id.
@@ -47,7 +59,7 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
 
         if (blockTypeId.equals(ExampleBlockOneImpl.BLOCK_TYPE_ID)) {
 
-            if (args.length != 3) {
+            if (args.length != 2) {
                 throw new IllegalArgumentException(
                         "Invalid number of arguments for block type id " + blockTypeId);
             }
@@ -58,9 +70,8 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
                         "Invalid arguments for block type id " + blockTypeId);
             }
 
-            return new ExampleBlockOneImpl(/* block type id */ (String) args[0],
-                    /* internal block id */ (String) args[1],
-                    /* default input text */ (String) args[2]);
+            return new ExampleBlockOneImpl(/* internal block id */ (String) args[0],
+                    /* default input text */ (String) args[1]);
         }
 
         throw new NotImplementedException("Block type id " + blockTypeId + " not found");

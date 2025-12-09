@@ -8,8 +8,6 @@
  * @since 2.0.5
  */
 module ru.spb.tksoft.flowforge.example.block.one {
-    // Export the main package
-    exports ru.spb.tksoft.flowforge.example.block.one;
 
     // Standard modules
     requires org.slf4j;

@@ -16,9 +16,6 @@ package ru.spb.tksoft.flowforge.example.block.one;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import ru.spb.tksoft.flowforge.sdk.contract.Block;
 import ru.spb.tksoft.flowforge.sdk.contract.BlockPlugin;
 import ru.spb.tksoft.flowforge.sdk.contract.RunnableStateChangeListener;
 import ru.spb.tksoft.flowforge.sdk.enumeration.RunnableState;
@@ -65,25 +62,16 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
     /**
      * Constructor.
      * 
-     * internalBlockId, blockTypeId, defaultInputText are validated in super constructor.
+     * internalBlockId, defaultInputText are validated in super constructor.
      * 
      * @param internalBlockId - the internal block id.
-     * @param blockTypeId - the block type id.
      * @param defaultInputText - the default input text.
      */
-    public ExampleBlockOneImpl(final @NotBlank String internalBlockId,
-            final @NotBlank String blockTypeId, final @NotNull String defaultInputText) {
+    public ExampleBlockOneImpl(final String internalBlockId,
+            final String defaultInputText) {
 
-        super(internalBlockId, blockTypeId, defaultInputText);
-    }
-
-    /**
-     * Service provider method for Java ServiceLoader.
-     * 
-     * @return a new instance of this block implementation.
-     */
-    public static Block provider() {
-        return new ExampleBlockOneImpl("default-internal-id", BLOCK_TYPE_ID, "");
+        // Data validation is done in super constructor.
+        super(BLOCK_TYPE_ID, internalBlockId, defaultInputText);
     }
 
     /** The maximum count. */
