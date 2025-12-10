@@ -34,6 +34,11 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
         // ...
     }
 
+    @Override
+    public String engineVersion() {
+        return "2.0.5";
+    }
+
     /**
      * Get the supported block type ids for ServiceLoader.
      * 
@@ -64,8 +69,7 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
                         "Invalid number of arguments for block type id " + blockTypeId);
             }
 
-            if (!(args[0] instanceof String) || !(args[1] instanceof String)
-                    || !(args[2] instanceof String)) {
+            if (!(args[0] instanceof String) || !(args[1] instanceof String)) {
                 throw new IllegalArgumentException(
                         "Invalid arguments for block type id " + blockTypeId);
             }

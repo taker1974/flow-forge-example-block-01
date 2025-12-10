@@ -16,7 +16,6 @@ package ru.spb.tksoft.flowforge.example.block.one;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.spb.tksoft.flowforge.sdk.contract.BlockPlugin;
 import ru.spb.tksoft.flowforge.sdk.contract.RunnableStateChangeListener;
 import ru.spb.tksoft.flowforge.sdk.enumeration.RunnableState;
 import ru.spb.tksoft.flowforge.sdk.model.BlockBaseImpl;
@@ -28,16 +27,13 @@ import ru.spb.tksoft.utils.log.LogEx;
  * 
  * @author Konstantin Terskikh, kostus.online.1974@yandex.ru, 2025
  */
-@BlockPlugin(engineVersion = "2.0.5", blockTypeDescription = "Example block 01",
-        blockTypeId = "example-block-01")
 public final class ExampleBlockOneImpl extends BlockBaseImpl
         implements RunnableStateChangeListener {
 
     private static final Logger log = LoggerFactory.getLogger(ExampleBlockOneImpl.class);
 
     /** Define the block type id for caching. */
-    public static final String BLOCK_TYPE_ID =
-            getBlockTypeIdFromAnnotation(ExampleBlockOneImpl.class);
+    public static final String BLOCK_TYPE_ID = "example-block-01";
 
     /**
      * Get the block type id.
