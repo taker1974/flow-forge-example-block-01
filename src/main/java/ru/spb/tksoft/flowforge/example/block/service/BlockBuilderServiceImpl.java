@@ -35,7 +35,7 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
     }
 
     @Override
-    public String expectedEngineVersion() {
+    public String getExpectedEngineVersion() {
         return "2.0.5";
     }
 
