@@ -23,17 +23,17 @@ import ru.spb.tksoft.flowforge.sdk.model.RunnableStateChangedEvent;
 import ru.spb.tksoft.utils.log.LogEx;
 
 /**
- * Example block 01 implementation.
+ * Example block 02 implementation.
  * 
  * @author Konstantin Terskikh, kostus.online.1974@yandex.ru, 2025
  */
-public final class ExampleBlockOneImpl extends BlockBaseImpl
+public final class ExampleBlockTwoImpl extends BlockBaseImpl
         implements RunnableStateChangeListener {
 
-    private static final Logger log = LoggerFactory.getLogger(ExampleBlockOneImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ExampleBlockTwoImpl.class);
 
     /** Define the block type id for caching. */
-    public static final String BLOCK_TYPE_ID = "example-block-01";
+    public static final String BLOCK_TYPE_ID = "example-block-02";
 
     /**
      * Get the block type id.
@@ -63,7 +63,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
      * @param internalBlockId - the internal block id.
      * @param defaultInputText - the default input text.
      */
-    public ExampleBlockOneImpl(final String internalBlockId,
+    public ExampleBlockTwoImpl(final String internalBlockId,
             final String defaultInputText) {
 
         // Data validation is done in super constructor.
@@ -71,7 +71,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
     }
 
     /** The maximum count. */
-    public static final int COUNT_MAX = 5;
+    public static final int COUNT_MAX = 3;
 
     /** The counter. */
     private int counter = 0;
@@ -86,9 +86,9 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
 
         // Catch the positive front of the RUNNING state.
         if (event.getNewState() == RunnableState.RUNNING) {
-            LogEx.trace(log, LogEx.me(), getLogText("new state: running example block 01"));
+            LogEx.trace(log, LogEx.me(), getLogText("new state: running example block 02"));
 
-            // TKSoft: Implement start logic of the example block 01.
+            // TKSoft: Implement start logic of the example block 02.
             // ...
 
             // TKSoft: For example, set the counter to 0.
@@ -97,9 +97,9 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
 
         // Catch the positive front of the DONE state.
         if (event.getNewState() == RunnableState.DONE) {
-            LogEx.trace(log, LogEx.me(), getLogText("new state: done example block 01"));
+            LogEx.trace(log, LogEx.me(), getLogText("new state: done example block 02"));
 
-            // TKSoft: Implement end/done logic of the example block 01.
+            // TKSoft: Implement end/done logic of the example block 02.
             // ...
 
             // In this exaple just let the FlowForge to go to the next block in the chain.
@@ -108,7 +108,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
     }
 
     /**
-     * Run the example block 01.
+     * Run the example block 02.
      * 
      * @see BlockBaseImpl#run() for the base class implementation of the state machine.
      */
@@ -119,9 +119,9 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
         super.run();
 
         if (getState() == RunnableState.RUNNING) {
-            LogEx.trace(log, LogEx.me(), getLogText("running example block 01"));
+            LogEx.trace(log, LogEx.me(), getLogText("running example block 02"));
 
-            // TKSoft: Implement running logic of the example block 01.
+            // TKSoft: Implement running logic of the example block 02.
             // ...
 
             // TKSoft: For example, increment the counter.
@@ -130,7 +130,7 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
             // TKSoft: If the counter is greater than the maximum count, set the DONE state.
             if (counter > COUNT_MAX) {
                 setResultText(
-                        "This is the result text of the example block 01, counter: " + counter);
+                        "This is the result text of the example block 02, counter: " + counter);
                 setState(RunnableState.DONE);
             }
         }

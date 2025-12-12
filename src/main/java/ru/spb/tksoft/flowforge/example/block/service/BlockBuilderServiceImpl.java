@@ -13,13 +13,16 @@
  */
 package ru.spb.tksoft.flowforge.example.block.service;
 
+import java.util.Arrays;
+import java.util.List;
 import ru.spb.tksoft.common.exceptions.NotImplementedException;
 import ru.spb.tksoft.flowforge.example.block.one.ExampleBlockOneImpl;
+import ru.spb.tksoft.flowforge.example.block.one.ExampleBlockTwoImpl;
 import ru.spb.tksoft.flowforge.sdk.contract.Block;
 import ru.spb.tksoft.flowforge.sdk.contract.BlockBuilderService;
 
 /**
- * Example block 01 builder service implementation.
+ * Example block 01/02 builder service implementation.
  * 
  * @author Konstantin Terskikh, kostus.online.1974@yandex.ru, 2025
  */
@@ -30,6 +33,21 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
      */
     public BlockBuilderServiceImpl() {
         // ...
+    }
+
+    @Override
+    public String getExpectedEngineVersion() {
+        return "2.0.5";
+    }
+
+    /**
+     * Get the supported block type ids for ServiceLoader.
+     * 
+     * @return the supported block type ids.
+     */
+    @Override
+    public List<String> getSupportedBlockTypeIds() {
+        return Arrays.asList(ExampleBlockOneImpl.BLOCK_TYPE_ID, ExampleBlockTwoImpl.BLOCK_TYPE_ID);
     }
 
     /**
@@ -47,20 +65,34 @@ public class BlockBuilderServiceImpl implements BlockBuilderService {
 
         if (blockTypeId.equals(ExampleBlockOneImpl.BLOCK_TYPE_ID)) {
 
-            if (args.length != 3) {
+            if (args.length != 2) {
                 throw new IllegalArgumentException(
                         "Invalid number of arguments for block type id " + blockTypeId);
             }
 
-            if (!(args[0] instanceof String) || !(args[1] instanceof String)
-                    || !(args[2] instanceof String)) {
+            if (!(args[0] instanceof String) || !(args[1] instanceof String)) {
                 throw new IllegalArgumentException(
                         "Invalid arguments for block type id " + blockTypeId);
             }
 
-            return new ExampleBlockOneImpl(/* block type id */ (String) args[0],
-                    /* internal block id */ (String) args[1],
-                    /* default input text */ (String) args[2]);
+            return new ExampleBlockOneImpl(/* internal block id */ (String) args[0],
+                    /* default input text */ (String) args[1]);
+        }
+
+        if (blockTypeId.equals(ExampleBlockTwoImpl.BLOCK_TYPE_ID)) {
+
+            if (args.length != 2) {
+                throw new IllegalArgumentException(
+                        "Invalid number of arguments for block type id " + blockTypeId);
+            }
+
+            if (!(args[0] instanceof String) || !(args[1] instanceof String)) {
+                throw new IllegalArgumentException(
+                        "Invalid arguments for block type id " + blockTypeId);
+            }
+
+            return new ExampleBlockTwoImpl(/* internal block id */ (String) args[0],
+                    /* default input text */ (String) args[1]);
         }
 
         throw new NotImplementedException("Block type id " + blockTypeId + " not found");
