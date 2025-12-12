@@ -10,7 +10,7 @@
     <groupId>ru.spb.tksoft</groupId>
     <artifactId>flow-forge-example-block-01</artifactId>
     <name>flow-forge-example-block-01</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>Example block for Flow Forge project.</description>
 
     <url>http://tksoft.spb.ru</url>
@@ -65,10 +65,10 @@
 
         <!-- TKSoft: Versions of our own libraries. -->
         <tk-log-utils.version>2.0.6</tk-log-utils.version>
-        <tk-common-exceptions.version>2.0.5</tk-common-exceptions.version>
+        <tk-common-exceptions.version>2.0.6</tk-common-exceptions.version>
 
         <!-- TKSoft: Version of FlowForge Block SDK. -->
-        <flow-forge-sdk.version>2.0.5</flow-forge-sdk.version>
+        <flow-forge-sdk.version>2.0.6</flow-forge-sdk.version>
 
     </properties>
 
