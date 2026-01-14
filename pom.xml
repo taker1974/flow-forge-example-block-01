@@ -70,6 +70,9 @@
         <!-- TKSoft: Version of FlowForge Block SDK. -->
         <flow-forge-sdk.version>2.0.6</flow-forge-sdk.version>
 
+        <!-- TKSoft: Version of FlowForge Engine (for tests). -->
+        <flow-forge-engine.version>2.0.7</flow-forge-engine.version>
+
     </properties>
 
     <dependencies>
@@ -140,6 +143,14 @@
             <groupId>ru.spb.tksoft</groupId>
             <artifactId>flow-forge-sdk</artifactId>
             <version>${flow-forge-sdk.version}</version>
+        </dependency>
+
+        <!-- TKSoft: Version of FlowForge Engine (for tests). -->
+        <dependency>
+            <groupId>ru.spb.tksoft</groupId>
+            <artifactId>flow-forge-engine</artifactId>
+            <version>${flow-forge-engine.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

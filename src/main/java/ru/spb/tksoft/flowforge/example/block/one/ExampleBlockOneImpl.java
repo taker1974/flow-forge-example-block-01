@@ -68,6 +68,9 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
 
         // Data validation is done in super constructor.
         super(BLOCK_TYPE_ID, internalBlockId, defaultInputText);
+
+        // Add the state change listener.
+        addStateChangeListener(this);
     }
 
     /** The maximum count. */
@@ -86,7 +89,8 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
 
         // Catch the positive front of the RUNNING state.
         if (event.getNewState() == RunnableState.RUNNING) {
-            LogEx.trace(log, LogEx.me(), getLogText("new state: running example block 01"));
+            LogEx.trace(log, LogEx.me(),
+                    getLogText("new state: running block " + getInternalBlockId()));
 
             // TKSoft: Implement start logic of the example block 01.
             // ...
@@ -97,7 +101,8 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
 
         // Catch the positive front of the DONE state.
         if (event.getNewState() == RunnableState.DONE) {
-            LogEx.trace(log, LogEx.me(), getLogText("new state: done example block 01"));
+            LogEx.trace(log, LogEx.me(),
+                    getLogText("new state: done block " + getInternalBlockId()));
 
             // TKSoft: Implement end/done logic of the example block 01.
             // ...
@@ -119,9 +124,9 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
         super.run();
 
         if (getState() == RunnableState.RUNNING) {
-            LogEx.trace(log, LogEx.me(), getLogText("running example block 01"));
+            LogEx.info(log, LogEx.me(), getLogText("running block " + getInternalBlockId()));
 
-            // TKSoft: Implement running logic of the example block 01.
+            // TKSoft: Implement running logic of the example block 02.
             // ...
 
             // TKSoft: For example, increment the counter.
@@ -129,8 +134,9 @@ public final class ExampleBlockOneImpl extends BlockBaseImpl
 
             // TKSoft: If the counter is greater than the maximum count, set the DONE state.
             if (counter > COUNT_MAX) {
-                setResultText(
-                        "This is the result text of the example block 01, counter: " + counter);
+                String resultText = "Result text of the " + getInternalBlockId() + ": " + counter;
+                LogEx.info(log, LogEx.me(), getLogText(resultText));
+                setResultText(resultText);
                 setState(RunnableState.DONE);
             }
         }
