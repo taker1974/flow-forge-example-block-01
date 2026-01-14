@@ -92,10 +92,15 @@ class BlocksInInstanceTest {
         instanceProcessingUnit.addInstance(instance, RunnableState.READY);
         Assertions.assertThat(instance.getState()).isEqualTo(RunnableState.READY);
 
-        for (int i = 0; i < 100; i++) {
+        int i = 0;
+        for (; i < 100; i++) {
             instanceProcessingUnit.processTick();
+            if (instance.getState() == RunnableState.DONE) {
+                break;
+            }
         }
 
+        Assertions.assertThat(i).isEqualTo(10);
         Assertions.assertThat(instance.getState()).isEqualTo(RunnableState.DONE);
     }
 }
